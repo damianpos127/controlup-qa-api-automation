@@ -130,17 +130,31 @@ public class TopMarketMoversTest : IDisposable
         var testExecutionTime = DateTime.UtcNow;
         
         // Get the solution root directory - works in both local and CI environments
-        // In CI, the working directory is the repository root, so artifacts/ is correct
-        // Locally, we need to navigate from test output directory to solution root
-        var currentDir = Directory.GetCurrentDirectory();
-        var artifactsDir = Path.Combine(currentDir, "artifacts");
+        // In CI, use GITHUB_WORKSPACE environment variable (set by GitHub Actions)
+        // Locally, navigate from test output directory to solution root
+        string artifactsDir;
+        var workspace = Environment.GetEnvironmentVariable("GITHUB_WORKSPACE");
         
-        // If we're in a test output directory (local dev), go up to solution root
-        if (currentDir.Contains("bin") || currentDir.Contains("obj"))
+        if (!string.IsNullOrEmpty(workspace))
         {
-            var testAssemblyDir = Path.GetDirectoryName(typeof(TopMarketMoversTest).Assembly.Location) ?? currentDir;
-            var solutionRoot = Path.GetFullPath(Path.Combine(testAssemblyDir, "..", "..", "..", "..", ".."));
-            artifactsDir = Path.Combine(solutionRoot, "artifacts");
+            // CI environment - use workspace root
+            artifactsDir = Path.Combine(workspace, "artifacts");
+        }
+        else
+        {
+            // Local environment - navigate from test output to solution root
+            var currentDir = Directory.GetCurrentDirectory();
+            if (currentDir.Contains("bin") || currentDir.Contains("obj"))
+            {
+                var testAssemblyDir = Path.GetDirectoryName(typeof(TopMarketMoversTest).Assembly.Location) ?? currentDir;
+                var solutionRoot = Path.GetFullPath(Path.Combine(testAssemblyDir, "..", "..", "..", "..", ".."));
+                artifactsDir = Path.Combine(solutionRoot, "artifacts");
+            }
+            else
+            {
+                // Already at solution root
+                artifactsDir = Path.Combine(currentDir, "artifacts");
+            }
         }
 
         // Act

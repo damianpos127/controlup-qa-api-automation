@@ -26,12 +26,15 @@ jobs:
     - name: Build solution
       run: dotnet build --no-restore --configuration Release
 
+    - name: Create artifacts directory
+      run: mkdir -p artifacts
+
     - name: Run tests
       env:
         RapidApi__Key: ${{ secrets.RAPIDAPI_KEY }}
         RapidApi__Host: ${{ secrets.RAPIDAPI_HOST }}
         RapidApi__BaseUrl: ${{ secrets.RAPIDAPI_BASE_URL }}
-      working-directory: ${{ github.workspace }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Upload test results
