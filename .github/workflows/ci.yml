@@ -31,6 +31,7 @@ jobs:
         RapidApi__Key: ${{ secrets.RAPIDAPI_KEY }}
         RapidApi__Host: ${{ secrets.RAPIDAPI_HOST }}
         RapidApi__BaseUrl: ${{ secrets.RAPIDAPI_BASE_URL }}
+      working-directory: ${{ github.workspace }}
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Upload test results
@@ -39,6 +40,7 @@ jobs:
       with:
         name: test-results
         path: artifacts/
+        if-no-files-found: warn
         retention-days: 7
 
     - name: Upload test reports
@@ -47,4 +49,5 @@ jobs:
       with:
         name: test-reports
         path: '**/TestResults/**'
+        if-no-files-found: ignore
         retention-days: 7

@@ -128,10 +128,20 @@ public class TopMarketMoversTest : IDisposable
         // Arrange
         const int topCount = 3;
         var testExecutionTime = DateTime.UtcNow;
-        // Get the solution root directory (4 levels up from test output: bin/Debug/net10.0 -> tests/ControlUp.ApiTests -> tests -> root)
-        var testAssemblyDir = Path.GetDirectoryName(typeof(TopMarketMoversTest).Assembly.Location) ?? Directory.GetCurrentDirectory();
-        var solutionRoot = Path.GetFullPath(Path.Combine(testAssemblyDir, "..", "..", "..", "..", ".."));
-        var artifactsDir = Path.Combine(solutionRoot, "artifacts");
+        
+        // Get the solution root directory - works in both local and CI environments
+        // In CI, the working directory is the repository root, so artifacts/ is correct
+        // Locally, we need to navigate from test output directory to solution root
+        var currentDir = Directory.GetCurrentDirectory();
+        var artifactsDir = Path.Combine(currentDir, "artifacts");
+        
+        // If we're in a test output directory (local dev), go up to solution root
+        if (currentDir.Contains("bin") || currentDir.Contains("obj"))
+        {
+            var testAssemblyDir = Path.GetDirectoryName(typeof(TopMarketMoversTest).Assembly.Location) ?? currentDir;
+            var solutionRoot = Path.GetFullPath(Path.Combine(testAssemblyDir, "..", "..", "..", "..", ".."));
+            artifactsDir = Path.Combine(solutionRoot, "artifacts");
+        }
 
         // Act
         var report = await _marketMoverService.GetTopMoversReportAsync(topCount);
