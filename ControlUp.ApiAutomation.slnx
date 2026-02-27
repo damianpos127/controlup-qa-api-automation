@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ControlUp.Core/ControlUp.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ControlUp.ApiTests/ControlUp.ApiTests.csproj" />
+  </Folder>
+</Solution>

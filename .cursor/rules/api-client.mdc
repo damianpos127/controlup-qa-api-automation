@@ -1,0 +1,24 @@
+---
+globs: *Client*.cs
+description: API client implementation patterns
+---
+# API Client Guidelines
+
+## Implementation Requirements
+- All API clients must implement an interface (e.g., `IBinanceApiClient`)
+- Use HttpClient injected via HttpClientFactory
+- Configure base URL, headers, and timeout in constructor
+- Use structured logging for all operations
+- Handle HTTP errors with EnsureSuccessStatusCode or custom error handling
+- Handle JSON deserialization errors gracefully
+- Use CancellationToken for all async operations
+
+## Error Handling
+- Log errors with appropriate log levels (Error for failures, Warning for edge cases)
+- Throw meaningful exceptions that include context
+- Don't swallow exceptions - let them bubble up with proper logging
+
+## Configuration
+- API credentials should come from configuration (not hardcoded)
+- Support both JSON configuration files and environment variables
+- Use IOptions pattern for configuration binding

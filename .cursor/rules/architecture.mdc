@@ -1,0 +1,24 @@
+---
+alwaysApply: true
+---
+# Architecture Guidelines
+
+## Project Structure
+This is a C# automation framework with clear separation of concerns:
+- **Core Library** (`src/ControlUp.Core`): Contains all business logic, API clients, and utilities
+- **Test Project** (`tests/ControlUp.ApiTests`): Integration tests that exercise the full framework
+
+## Key Patterns
+- Use dependency injection for all services
+- Prefer interfaces over concrete implementations
+- Use HttpClientFactory pattern for HTTP clients
+- Configuration should support both JSON files and environment variables
+- All API interactions should be async/await
+- Logging should be structured and informative
+
+## File Organization
+- Models go in `Models/` directory
+- Clients go in `Clients/` directory  
+- Services go in `Services/` directory
+- Configuration classes go in `Configuration/` directory
+- Reporting logic goes in `Reporting/` directory

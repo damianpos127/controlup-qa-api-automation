@@ -1,0 +1,36 @@
+---
+globs: *.cs
+description: Testing strategies for volatile market data
+---
+# Testing Guidelines
+
+## Test Philosophy
+Since we're testing against live market data that changes constantly:
+- **DO NOT** assert exact price values or specific symbols
+- **DO** assert data structure, ordering, and business rules
+- **DO** verify that all required fields are present and valid
+- **DO** check that symbols are distinct
+- **DO** verify descending order by price change percent
+- **DO** ensure average prices are positive (sanity check)
+
+## Test Structure
+- Use xUnit as the test framework
+- Use ITestOutputHelper for test output visibility
+- Tests should be integration tests (they call real API)
+- Each test should be independent and repeatable
+- Use proper async/await patterns
+
+## Example Good Assertions
+```csharp
+// ✅ Good: Structure validation
+Assert.NotNull(report);
+Assert.True(report.TopMovers.Count > 0);
+Assert.False(string.IsNullOrWhiteSpace(mover.Symbol));
+
+// ✅ Good: Business rule validation
+Assert.True(current.PriceChangePercent24Hr >= next.PriceChangePercent24Hr);
+
+// ❌ Bad: Exact value assertion (will fail when market changes)
+Assert.Equal("BTCUSDT", mover.Symbol);
+Assert.Equal(43250.50m, mover.AveragePrice);
+```

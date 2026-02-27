@@ -1,0 +1,51 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.log
+
+## Visual Studio
+.vs/
+*.userprefs
+*.sln.docstates
+
+## Test Results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+## Artifacts (keep directory structure but ignore generated files)
+artifacts/*
+!artifacts/.gitkeep
+
+## Configuration (local overrides)
+appsettings.Local.json
+*.Local.json
+
+## IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+## OS
+.DS_Store
+Thumbs.db
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+
+## Build results
+[Bb]uild/
+[Bb]uilds/
+*.msbuild
